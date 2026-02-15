@@ -80,9 +80,7 @@
         /* --- THE GRID FIX --- */
         .grid-container {
             background-color: var(--grid-line);
-            /* This acts as the border */
             padding: 2px;
-            /* Outside border thickness */
             width: 96vw;
             max-width: 600px;
         }
@@ -91,14 +89,12 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 2px;
-            /* This creates the interior lines */
             background-color: var(--grid-line);
             width: 100%
         }
 
         .cell {
             background-color: #fff;
-            /* Reset cell back to white */
             aspect-ratio: 1 / 1;
             display: flex;
             align-items: center;
@@ -167,7 +163,6 @@
                 transform: scale(0.6);
                 opacity: 0;
             }
-
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -217,7 +212,7 @@
             <div class="bingo-grid" id="grid"></div>
         </div>
 
-        <button onclick="location.reload()" style="margin-top: 30px; background: #666;">NEW PLAYER / RESET</button>
+        <button onclick="resetGame()" style="margin-top: 30px; background: #655;">NEW BOARD</button>
     </div>
 
     <div id="win-modal">
@@ -226,7 +221,7 @@
             <p style="font-size: 1.2rem; margin: 15px 0;">You've completed a line!</p>
             <div class="modal-btns">
                 <button onclick="closeModal()">KEEP PLAYING</button>
-                <button class="secondary" onclick="location.reload()">NEW GAME</button>
+                <button class="secondary" onclick="resetGame()">NEW GAME</button>
             </div>
         </div>
     </div>
@@ -262,7 +257,8 @@
             const name = document.getElementById('name-input').value;
             if (!name) { alert("Please enter your name!"); return; }
             localStorage.setItem("saltBingoName", name);
-            // Clear old board data for a new player
+            
+            // Clear board memory but keep name
             localStorage.removeItem("saltBingoBoard");
             localStorage.removeItem("saltBingoChecked");
 
@@ -274,16 +270,14 @@
 
         function initBoard() {
             const grid = document.getElementById('grid');
-            grid.innerHTML = ''; // Clear grid for re-initialization
+            grid.innerHTML = ''; 
 
-            // 1. Get or Create Shuffled List
             let shuffled = JSON.parse(localStorage.getItem("saltBingoBoard"));
             if (!shuffled) {
                 shuffled = [...entries].sort(() => 0.5 - Math.random()).slice(0, 24);
                 localStorage.setItem("saltBingoBoard", JSON.stringify(shuffled));
             }
 
-            // 2. Get Saved Checked States
             let checkedIndices = JSON.parse(localStorage.getItem("saltBingoChecked")) || [];
             let selectedCount = 0;
 
@@ -308,7 +302,7 @@
                 }
                 grid.appendChild(cell);
             }
-            checkWin(); // Check if they already won on load
+            checkWin(); 
         }
 
         function saveState() {
@@ -318,7 +312,9 @@
         }
 
         function resetGame() {
-            localStorage.clear();
+            // Clears board and checks, but keeps name for convenience
+            localStorage.removeItem("saltBingoBoard");
+            localStorage.removeItem("saltBingoChecked");
             location.reload();
         }
 
