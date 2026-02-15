@@ -191,6 +191,15 @@
             background: #eee;
             color: #333;
         }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 30px;
+            width: 80%;
+            max-width: 300px;
+        }
     </style>
 </head>
 
@@ -212,7 +221,10 @@
             <div class="bingo-grid" id="grid"></div>
         </div>
 
-        <button onclick="resetGame()" style="margin-top: 30px; background: #655;">NEW BOARD</button>
+        <div class="button-group">
+            <button onclick="resetGame()" style="background: #677;">NEW BOARD</button>
+            <button onclick="goHome()" style="background: #677;">HOME</button>
+        </div>
     </div>
 
     <div id="win-modal">
@@ -222,6 +234,7 @@
             <div class="modal-btns">
                 <button onclick="closeModal()">KEEP PLAYING</button>
                 <button class="secondary" onclick="resetGame()">NEW GAME</button>
+                <button onclick="goHome()" style="background: transparent; color: #888; font-size: 0.8rem; text-decoration: underline;">Back to Home</button>
             </div>
         </div>
     </div>
@@ -238,7 +251,7 @@
             "Evan verbal noises during sermon", "References original Greek/Hebrew/Aramaic", "Seemingly unrelated story", "Interactive question during sermon",
             "Random stage prop", "Someone texting mid sermon", "Awkward/forced saying hi to someone around you",
             "Someone brings in food", "Mic feedback", "Someone sings incorrect lyrics", "Speaker self deprecating joke", "\"Point number ___ is this\"",
-            "Man with a tote bag", "Someone drinking energy drink", "Bright camera flashes"
+            "Man with a tote bag", "Someone drinking energy drink", "Bright camera flashes", "Not the usual speaker"
         ];
 
         let hasWon = false;
@@ -258,7 +271,6 @@
             if (!name) { alert("Please enter your name!"); return; }
             localStorage.setItem("saltBingoName", name);
             
-            // Clear board memory but keep name
             localStorage.removeItem("saltBingoBoard");
             localStorage.removeItem("saltBingoChecked");
 
@@ -312,9 +324,13 @@
         }
 
         function resetGame() {
-            // Clears board and checks, but keeps name for convenience
             localStorage.removeItem("saltBingoBoard");
             localStorage.removeItem("saltBingoChecked");
+            location.reload();
+        }
+
+        function goHome() {
+            localStorage.clear();
             location.reload();
         }
 
